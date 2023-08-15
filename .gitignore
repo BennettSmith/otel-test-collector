@@ -1,7 +1,7 @@
-certs/ca.key
-certs/ca.pem
-certs/ca.srl
-certs/client.key
-certs/client.pem
-certs/server.key
-certs/server.pem
+cert/ca.key
+cert/ca.pem
+cert/ca.srl
+cert/client.key
+cert/client.pem
+cert/server.key
+cert/server.pem
