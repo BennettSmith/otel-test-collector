@@ -1,0 +1,46 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        tls:
+          cert_file: /etc/server.pem
+          key_file:  /etc/server.key
+          ca_file: /etc/ca.pem
+#       http:
+#         cors_allowed_origins:
+#         - http://*
+#         - https://*
+
+exporters:
+  logging:
+    loglevel: debug
+  zipkin:
+    endpoint: "http://zipkin:9411/api/v2/spans"
+  jaeger:
+    endpoint: "jaeger:14250"
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+
+processors:
+  resource:
+    attributes:
+      - key: service.name
+        value: OTLP Exporter
+        action: insert
+  batch:
+
+service:
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [zipkin, jaeger, logging]
+      processors: [resource, batch]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus]
+      processors: [resource, batch]

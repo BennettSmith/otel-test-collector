@@ -1,0 +1,49 @@
+
+services:
+
+  jaeger:
+    container_name: otel-test-jaeger
+    image: jaegertracing/all-in-one:latest
+    platform: linux/amd64
+    ports:
+      - "16686:16686"
+      - "14250"
+
+  zipkin:
+    container_name: otel-test-zipkin
+    image: openzipkin/zipkin:latest
+    ports:
+      - 9411:9411
+
+  prometheus:
+    container_name: otel-test-prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  collector:
+    container_name: otel-test-collector
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./collector-config.yaml:/etc/otel-collector-config.yml
+      - ../certs/ca.pem:/etc/ca.pem
+      - ../certs/server.pem:/etc/server.pem
+      - ../certs/server.key:/etc/server.key
+    ports:
+      - "1888:1888"     # pprof extension
+      - "8888:8888"     # Prometheus metrics exposed by the collector
+      - "8889:8889"     # Prometheus exporter metrics
+      - "13133:13133"   # health_check extension
+      - "9411"          # Zipkin receiver
+      - "55679:55679"   # zpages extension
+      - "9464:9464"
+      - "4317:4317"
+      - "55681:55681"
+    depends_on:
+      - jaeger
+      - zipkin
+      - prometheus
+
