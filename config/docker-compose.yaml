@@ -29,9 +29,9 @@ services:
     command: ["--config=/etc/otel-collector-config.yml"]
     volumes:
       - ./collector-config.yaml:/etc/otel-collector-config.yml
-      - ../certs/ca.pem:/etc/ca.pem
-      - ../certs/server.pem:/etc/server.pem
-      - ../certs/server.key:/etc/server.key
+      - ../cert/ca.pem:/etc/ca.pem
+      - ../cert/server.pem:/etc/server.pem
+      - ../cert/server.key:/etc/server.key
     ports:
       - "1888:1888"     # pprof extension
       - "8888:8888"     # Prometheus metrics exposed by the collector

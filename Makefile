@@ -1,4 +1,9 @@
 
+default:
+
+generate-cert:
+	(cd cert; ./generate_test_certs.sh)
+
 start:
 	docker compose --file config/docker-compose.yaml up --detach
 
