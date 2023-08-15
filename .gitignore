@@ -1,0 +1,7 @@
+certs/ca.key
+certs/ca.pem
+certs/ca.srl
+certs/client.key
+certs/client.pem
+certs/server.key
+certs/server.pem
